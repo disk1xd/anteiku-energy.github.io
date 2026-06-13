@@ -1,0 +1,73 @@
+---
+import type { TreeRow } from "../lib/noteTree";
+
+interface Props {
+  rows: TreeRow[];
+  currentId: string;
+}
+
+const { rows, currentId } = Astro.props;
+---
+
+<nav class="note-tree" aria-label="notes in this series">
+  <ul>
+    {
+      rows.map((row) => {
+        const isCurrent = row.node.id === currentId;
+        const title = row.node.paper?.data.title ?? row.node.segment;
+        return (
+          <li class:list={["tree-row", { "is-current": isCurrent }]}>
+            <span class="tree-guide">{row.prefix}</span>
+            {row.node.paper && !isCurrent ? (
+              <a href={`/papers/${row.node.id}`}>{title}</a>
+            ) : row.node.paper ? (
+              <span class="here" aria-current="page">
+                {title}
+              </span>
+            ) : (
+              <span class="folder-name">{row.node.segment}/</span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+
+<style>
+  .note-tree {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.95;
+    margin: 0 0 2.4rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .note-tree ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tree-row {
+    white-space: pre;
+  }
+  .tree-guide {
+    color: var(--faint);
+    opacity: 0.6;
+    white-space: pre;
+  }
+  .note-tree a {
+    color: var(--muted);
+  }
+  .note-tree a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .tree-row.is-current .here {
+    color: var(--accent);
+  }
+  .folder-name {
+    color: var(--faint);
+  }
+</style>

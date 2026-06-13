@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const papers = await getCollection(
+  "papers",
+  ({ data }) => !data.draft && !data.unlisted,
+);
+
+const counts = new Map<string, number>();
+for (const p of papers) {
+  for (const t of p.data.tags) {
+    counts.set(t, (counts.get(t) ?? 0) + 1);
+  }
+}
+const tags = [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="Tags · Anteiku">
+  <section class="wrap hero">
+    <p class="kicker">index</p>
+    <h1>Tags</h1>
+    <p>Browse papers by topic.</p>
+  </section>
+
+  <section class="wrap">
+    {
+      tags.length === 0 ? (
+        <p class="empty">No tags yet.</p>
+      ) : (
+        <p style="display:flex;flex-wrap:wrap;gap:0.6rem;line-height:2.4">
+          {tags.map(([tag, count]) => (
+            <a class="tag" href={`/tags/${tag}`}>
+              #{tag} · {count}
+            </a>
+          ))}
+        </p>
+      )
+    }
+  </section>
+</BaseLayout>

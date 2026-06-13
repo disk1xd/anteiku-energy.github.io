@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { members } from "../data/members";
+
+const papers = (
+  await getCollection("papers", ({ data }) => !data.draft && !data.unlisted)
+).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const byYear = new Map<number, typeof papers>();
+for (const p of papers) {
+  const y = p.data.date.getFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(p);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", { day: "2-digit", month: "short" });
+---
+
+<BaseLayout>
+  <section class="wrap hero">
+    <p class="kicker">research collective</p>
+    <h1>Anteiku</h1>
+    <p>low-level thoughts (get it? haha)</p>
+  </section>
+
+  <section class="wrap">
+    {
+      papers.length === 0 ? (
+        <p class="empty">
+          No papers yet. Drop a <code>.md</code> file in{" "}
+          <code>src/content/papers/</code>.
+        </p>
+      ) : (
+        years.map((year) => (
+          <>
+            <h2 class="year-label">{year}</h2>
+            <ul class="paper-list">
+              {byYear.get(year)!.map((p) => (
+                <li class="paper-item">
+                  <a class="paper-link" href={`/papers/${p.id}`}>
+                    <p class="paper-title">
+                      <span class="arrow">›</span>
+                      {p.data.title}
+                    </p>
+                    <p class="paper-summary">{p.data.summary}</p>
+                    <p class="paper-meta">
+                      <span class="authors">{p.data.authors.join(", ")}</span>
+                      <span>{fmt(p.data.date)}</span>
+                      {p.data.tags.length > 0 && (
+                        <span>{p.data.tags.map((t) => `#${t}`).join(" ")}</span>
+                      )}
+                    </p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))
+      )
+    }
+  </section>
+
+  <section class="wrap">
+    <h2 class="year-label">members</h2>
+    <p class="member-row">
+      {
+        members.map((m, i) => (
+          <>
+            {i > 0 && <span class="dot">·</span>}
+            <span class="m">{m.nick}</span>
+          </>
+        ))
+      }
+    </p>
+    <p class="member-note"><a href="/about">about us →</a></p>
+  </section>
+</BaseLayout>

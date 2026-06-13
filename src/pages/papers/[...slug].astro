@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NoteTree from "../../components/NoteTree.astro";
+import {
+  buildTree,
+  groupRootFor,
+  countNotes,
+  flattenTree,
+} from "../../lib/noteTree";
+
+export async function getStaticPaths() {
+  const papers = await getCollection("papers", ({ data }) => !data.draft);
+  return papers.map((paper) => ({
+    params: { slug: paper.id },
+    props: { paper },
+  }));
+}
+
+const { paper } = Astro.props;
+const { Content } = await render(paper);
+
+const all = await getCollection("papers", ({ data }) => !data.draft);
+const group = groupRootFor(buildTree(all), paper.id);
+const treeRows =
+  group && countNotes(group) > 1 ? flattenTree(group) : [];
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+---
+
+<BaseLayout title={`${paper.data.title} · Anteiku`} description={paper.data.summary}>
+  <article class="wrap">
+    <a class="back-link" href="/">← all papers</a>
+
+    <header class="paper-header">
+      <h1>{paper.data.title}</h1>
+      <p class="sub">
+        <span class="authors">{paper.data.authors.join(", ")}</span>
+        <span>{fmt(paper.data.date)}</span>
+      </p>
+      {
+        paper.data.tags.length > 0 && (
+          <p class="sub" style="margin-top:0.7rem">
+            {paper.data.tags.map((t) => (
+              <a class="tag" href={`/tags/${t}`}>
+                #{t}
+              </a>
+            ))}
+          </p>
+        )
+      }
+    </header>
+
+    {treeRows.length > 0 && <NoteTree rows={treeRows} currentId={paper.id} />}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <hr />
+    <a class="back-link" href="/">← all papers</a>
+  </article>
+</BaseLayout>

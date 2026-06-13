@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const papers = await getCollection(
+    "papers",
+    ({ data }) => !data.draft && !data.unlisted,
+  );
+  const tags = new Set<string>();
+  for (const p of papers) for (const t of p.data.tags) tags.add(t);
+
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      papers: papers
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { tag, papers } = Astro.props;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", { day: "2-digit", month: "short", year: "numeric" });
+---
+
+<BaseLayout title={`#${tag} · Anteiku`}>
+  <section class="wrap hero">
+    <p class="kicker">tag</p>
+    <h1>#{tag}</h1>
+    <p>{papers.length} paper{papers.length === 1 ? "" : "s"}.</p>
+  </section>
+
+  <section class="wrap">
+    <ul class="paper-list">
+      {
+        papers.map((p) => (
+          <li class="paper-item">
+            <a class="paper-link" href={`/papers/${p.id}`}>
+              <p class="paper-title">
+                <span class="arrow">›</span>
+                {p.data.title}
+              </p>
+              <p class="paper-summary">{p.data.summary}</p>
+              <p class="paper-meta">
+                <span class="authors">{p.data.authors.join(", ")}</span>
+                <span>{fmt(p.data.date)}</span>
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <hr />
+    <a class="back-link" href="/tags">← all tags</a>
+  </section>
+</BaseLayout>
