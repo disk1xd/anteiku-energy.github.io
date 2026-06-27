@@ -31,4 +31,12 @@ export const members: Member[] = [
     nick: "booleano / cherosin",
     bio: "dev abap java go linux quake3 tibia api bancária br sap",
   },
+  {
+    nick: "nayara / nay",
+    bio: "Bentley Systems / sup / sql c python e java",
+  },
+  {
+    nick: "rovier",
+    bio: "o que sobrou de nós",
+  }
 ];
