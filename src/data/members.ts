@@ -33,7 +33,7 @@ export const members: Member[] = [
   },
   {
     nick: "nayara / nay",
-    bio: "Bentley Systems / sup / sql c python e java",
+    bio: "sup / sql / c python e java.",
   },
   {
     nick: "rovier",
