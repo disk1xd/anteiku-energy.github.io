@@ -39,4 +39,8 @@ export const members: Member[] = [
     nick: "rovier",
     bio: "o que sobrou de nós",
   },
+  {
+    nick: "m2hcz",
+    bio: "where've you been through all this time...?",
+  };
 ];
