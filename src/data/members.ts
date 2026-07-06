@@ -42,5 +42,5 @@ export const members: Member[] = [
   {
     nick: "m2hcz",
     bio: "where've you been through all this time...?",
-  };
+  },
 ];
