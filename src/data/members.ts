@@ -3,7 +3,7 @@ export type Member = { nick: string; bio?: string };
 export const members: Member[] = [
   { nick: "kemuri", bio: "Through the distorted lens I found a cure." },
   { nick: "seepeer" },
-  { nick: "Sp1d3rM", bio: "relenteless rockerboy" },
+  { nick: "Sp1d3rM", bio: "touching memory in ways that makes it feel funny." },
   { nick: "mang3ky0", bio: "APT enthusiast and Threat Intel." },
   { nick: "Kinuzo", bio: "as guerras vem e vão, mas meus soldados são eternos" },
   { nick: "tonettao", bio: "Wiretup Sênior Reader" },
@@ -30,10 +30,6 @@ export const members: Member[] = [
   {
     nick: "booleano / cherosin",
     bio: "dev abap java go linux quake3 tibia api bancária br sap",
-  },
-  {
-    nick: "nayara / nay",
-    bio: "Needa slow down its not a race, can this feeling be erased?",
   },
   {
     nick: "rovier",
