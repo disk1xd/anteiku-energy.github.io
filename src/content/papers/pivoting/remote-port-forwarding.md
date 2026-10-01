@@ -23,7 +23,7 @@ unlisted: true
   </figcaption>
 </figure>
 
-Ao invés de abrir um listener local e encaminhar um serviço no host remoto para a nossa porta, o `Remote Port Forwarding` encaminha um `serviço local` para um `listener remoto`. Vamos supor que nossa `Attack Host` tem acesso a um `Ubuntu Victim`. Hipoteticamente, obtivemos as credenciais de um usuário de uma máquina `Windows`, porém essa máquina consegue se conectar apenas à subnet `172.16.0.0/17`.
+Em vez de abrir um listener local e encaminhar um serviço no host remoto para a nossa porta, o `Remote Port Forwarding` encaminha um `serviço local` para um `listener remoto`. Vamos supor que nossa `Attack Host` tem acesso a um `Ubuntu Victim`. Hipoteticamente, obtivemos as credenciais de um usuário de uma máquina `Windows`, porém essa máquina consegue se conectar apenas à subnet `172.16.0.0/17`.
 
 <img
   class="shot"
