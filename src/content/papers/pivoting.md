@@ -7,25 +7,15 @@ tags: ["redteam", "networking", "pivoting"]
 draft: false
 ---
 
-<figure>
-  <img
-    src="/images/above-the-lights-yuumei.jpg"
-    alt="A lone figure on a rooftop overlooking a vast neon city at night, from Fisheye Placebo."
-    loading="lazy"
-    width="1500"
-    height="762"
-  />
-  <figcaption>
-    &ldquo;Above the Lights&rdquo; art by
-    <a href="https://www.yuumeiart.com" target="_blank" rel="noopener">Yuumei</a>.
-  </figcaption>
-</figure>
+Antes de chegar em `Pivoting`, precisamos entender o que é uma segmentação de rede.
 
-- Antes de chegar em `Pivoting` precisamos entender o que eh uma segmentacao de rede.
-    - A segmentacao de rede eh a pratica de dividir uma rede em secoes isoladas ou menores, essa tecnica alem de melhorar o desempenho no geral, ela eh fundamental para a seguranca da rede, pois dificulta ameacas se espalharem lateralmente por toda a infra da empresa. Os principais metodos para implementar essa divisao incluem:
-        - `VLANs (Virtual Local Area Network)`: Permite dividir logicamente uma rede fisica em varias redes menores, limitando dominios de broadcast e isolando o trafego.
-        - `Subnetting`: Divisao de uma faixa de enderecos IP em redes menores.
+A segmentação de rede é a prática de dividir uma rede em seções isoladas ou menores. Essa técnica, além de melhorar o desempenho geral, é fundamental para a segurança da rede, pois dificulta que ameaças se espalhem lateralmente por toda a infraestrutura da empresa. Os principais métodos para implementar essa divisão incluem:
+
+- `VLANs (Virtual Local Area Network)`: Permite dividir logicamente uma rede física em várias redes menores, limitando domínios de broadcast e isolando o tráfego.
+- `Subnetting`: Divisão de uma faixa de endereços IP em redes menores.
 
 ### Pivoting
-- `Pivoting` eh a tecnica de usar um host comprometido como um "entrypoint" para ir mais a fundo no ambiente. Imagine que voce conseguiu invadir uma casa, apos a invasao inicial voce usa "portas secretadas" da casa para acessar comodos que nao seriam possiveis acessar so pela invasao inicial `(entrypoint)`. 
-    - Em termos "ciberneticos": assim que voce consegue um `entrypoint`, voce `"pivota"` pelos sistemas internos que normalmente estariam inacessiveis.
+
+`Pivoting` é a técnica de usar um host comprometido como um entrypoint para avançar mais fundo no ambiente. Imagine que você conseguiu invadir uma casa e, após a invasão inicial, utiliza passagens internas para acessar cômodos que não seriam acessíveis apenas pela entrada principal `(entrypoint)`.
+
+Em termos práticos: assim que você obtém um `entrypoint`, você `"pivota"` pelos sistemas internos que normalmente estariam inacessíveis.
