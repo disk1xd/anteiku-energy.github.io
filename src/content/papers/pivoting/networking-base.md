@@ -22,22 +22,24 @@ unlisted: true
   </figcaption>
 </figure>
 
-- Ser capaz de compreender o conceito de `Pivoting` requer uma solida compreensao de alguns conceitos de rede.
+Compreender o conceito de `Pivoting` exige uma base sólida em alguns conceitos de rede.
 
-### IP Addresing & NICs
+### IP Addressing & NICs
 
-- Todo computador que interage com uma rede precisa de um endereco IP, se ele nao tiver um, ele nunca vai interagir com uma rede. O endereco IP eh normalmente atribuido automaticamente pelo `DHCP (Dynamic Host Configuration Protocol)` - Protocolo responsavel por automatizar essa tarefa, apesar disso tambem eh comum encontrar computadores com IP's atribuidos estaticamente, uma explicacao abaixo sobre a configuracao manual.
-    - Voce define o IP diretamente no OS, o que garante que o aparelho SEMPRE usara aquele endereco, mesmo fora da rede original. Eh fundamental para regras de firewall, redirecionamento de portas e etc.
+Todo computador que interage com uma rede precisa de um endereço IP. Sem ele, a comunicação simplesmente não acontece. Esse endereço normalmente é atribuído automaticamente pelo `DHCP (Dynamic Host Configuration Protocol)`, protocolo responsável por automatizar essa tarefa. Ainda assim, é comum encontrar máquinas com IPs atribuídos estaticamente. Uma explicação sobre essa configuração manual:
 
-        OBS: Isso pode dar (e vai dar) conflito se o IP ja estiver em uso por outra coisa na rede (tendo em vista que voce configura ele manualmente)
-- Dinamicamente ou estaticamente, um endereco IP sempre vai ser atribuido a um `NIC (Network Interface Controller)`. Abstraindo bastante, esse processo designa um IP a um adaptor de rede (fisico ou virtual), enquanto o IP identifica o dispositivo para o roteamento de dados, o `NIC` conecta o hardware a rede (cabos ou Wi-Fi). O reconhecimento de oportunidades de `pivoting` depende frequentemente dos enderecos IP's atribuidos aos hosts que comprometemos, pois eles podem indicar as redes que nossa vitima pode alcancar.
+Você define o IP diretamente no sistema operacional, o que garante que o dispositivo sempre utilizará aquele endereço, independentemente da rede em que estiver. Isso é fundamental para regras de firewall, redirecionamento de portas, entre outros.
+
+> **OBS:** Isso pode gerar (e vai gerar) conflito caso o IP já esteja em uso por outro dispositivo na rede, já que você o configurou manualmente.
+
+Seja de forma dinâmica ou estática, um endereço IP sempre será atribuído a um `NIC (Network Interface Controller)`. Abstraindo bastante: esse processo designa um IP a um adaptador de rede, seja ele físico ou virtual. Enquanto o IP identifica o dispositivo para o roteamento de dados, o `NIC` conecta o hardware à rede, seja por cabo ou Wi-Fi. O reconhecimento de oportunidades de `pivoting` depende frequentemente dos endereços IP atribuídos aos hosts que comprometemos, pois eles podem indicar quais redes nossa vítima consegue alcançar.
 
 ### Routing
 
-- Routing eh o processo de decidir por qual caminho um pacote vai trafegar ate chegar no destino. Quando voce compromete um host e quer alcancar outra rede, eh necessario que o trafego passe pelo host comprometido, pra isso funcionar tem que manipular as rotas, ou adicionar uma rota estatica na sua maquina apontando pro host comprometido, ou usando ele como gateway. Voce dita aonde os pacotes passam, eh a logica do `pivoting`.
+Routing é o processo de decidir por qual caminho um pacote vai trafegar até chegar ao destino. Quando você compromete um host e quer alcançar outra rede, é necessário que o tráfego passe por ele. Para isso funcionar, você precisa manipular as rotas: adicionar uma rota estática na sua máquina apontando para o host comprometido, ou utilizá-lo como gateway. Você dita por onde os pacotes passam. Essa é a lógica do `pivoting`.
 
 ```sh
-  ┌──(kemuri㉿evil)-[~]
+┌──(kemuri㉿evil)-[~]
 └─$ route         
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
@@ -45,8 +47,8 @@ default         192.168.25.2    0.0.0.0         UG    100    0        0 eth0
 192.168.25.0    0.0.0.0         255.255.255.0   U     100    0        0 eth0
 ```
 
-qualquer trafego sem destino especifico (default) passa pela gateway (podemos chamar de "carteiro") `192.168.25.2` antes de sair da interface de rede `eth0`.
+Qualquer tráfego sem destino específico (`default`) passa pela gateway `192.168.25.2` antes de sair pela interface de rede `eth0`. Podemos chamar essa gateway de "carteiro".
 
-trafego destinado a subnet inteira de `192.168.25.0/24` vai para a `eth0` sem precisar de gateway.
+Tráfego destinado à subnet `192.168.25.0/24` vai direto para a `eth0`, sem precisar de gateway.
 
-OBS: NAO confunda o `0.0.0.0` da `Gateway` com o bind de outros servicos, nao eh a mesma coisa, ela significa que NAO TEM GATEWAY!!
+> **OBS:** Não confunda o `0.0.0.0` da coluna `Gateway` com o bind de outros serviços. Não é a mesma coisa. Aqui ele significa que NÃO HÁ GATEWAY.
